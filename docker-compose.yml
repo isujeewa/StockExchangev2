@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  ccse.authserver:
+    image: ${DOCKER_REGISTRY-}ccseauthserver
+    build:
+      context: .
+      dockerfile: CCSE.AuthServer/Dockerfile
+
+  pgadmin:
+    image: dpage/pgadmin4
+
+  authdb:
+    image: postgres
+
+  ccse.userservice:
+    image: ${DOCKER_REGISTRY-}ccseuserservice
+    build:
+      context: .
+      dockerfile: CCSE.UserService/Dockerfile
+
+  ccse.stockapi:
+    image: ${DOCKER_REGISTRY-}ccsestockapi
+    build:
+      context: .
+      dockerfile: CCSE.StockApi/Dockerfile
+
+  ccse.transactionapi:
+    image: ${DOCKER_REGISTRY-}ccsetransactionapi
+    build:
+      context: .
+      dockerfile: CCSE.TransactionApi/Dockerfile
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+
+

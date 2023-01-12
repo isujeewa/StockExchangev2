@@ -1,0 +1,71 @@
+version: '3.4'
+
+services:
+  ccse.authserver:
+   container_name: authserver
+   environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+   ports:
+      - "8000:80"
+   depends_on:
+      - authdb
+   volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  pgadmin:
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@ccse.com
+      - PGADMIN_DEFAULT_PASSWORD=admin@1234
+    restart: always
+    ports:
+        - "5050:80"
+    volumes:
+      - pgadmin_data:/root/.pgadmin
+
+  authdb:
+    container_name: authdb
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=sujeewa@1234
+      - POSTGRES_DB=User
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    restart: always
+    ports:
+        - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/userdb-data/
+
+  ccse.userservice:
+    container_name: userservice
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8001:80"
+    depends_on:
+      - authdb
+      - ccse.authserver
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  ccse.stockapi:
+    container_name: stockapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8002:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  ccse.transactionapi:
+    container_name: transactionapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8003:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
