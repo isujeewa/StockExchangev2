@@ -6,6 +6,7 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
+COPY ["CCSE.Utils/CCSE.Utils.csproj", "CCSE.Utils/"]
 COPY ["CCSE.StockApi/CCSE.StockApi.csproj", "CCSE.StockApi/"]
 RUN dotnet restore "CCSE.StockApi/CCSE.StockApi.csproj"
 COPY . .
